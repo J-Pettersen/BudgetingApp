@@ -10,16 +10,16 @@ namespace BudgetingAPI.Data
         {
             var expenses = new List<Expense>
             {
-                new Expense{id=1, type="Food",description="Eggs on toast.", outgoings=true, date=DateTime.Now},
-                new Expense{id=2, type="Leisure",description="Pub.", outgoings=true, date=DateTime.Now},
-                new Expense{id=3, type="Salary",description="Salary.", outgoings=false, date=DateTime.Now}
+                new Expense{Id=1, Type="Food",Description="Eggs on toast.", Outgoings=true, Amount=12.99M, Date=DateTime.Now},
+                new Expense{Id=2, Type="Leisure",Description="Pub.", Outgoings=true, Amount=39.99M, Date=DateTime.Now},
+                new Expense{Id=3, Type="Salary",Description="Salary.", Outgoings=false, Amount=500M,Date=DateTime.Now}
             };
             return expenses;
         }
 
         public Expense GetExpenseById(int id)
         {
-            return new Expense{id=1, type="Food",description="eggs on toast", outgoings=true, date=DateTime.Now};
+            return new Expense{Id=1, Type="Food",Description="Eggs on toast.", Outgoings=true, Amount=12.99M, Date=DateTime.Now};
         }
     }
 }
