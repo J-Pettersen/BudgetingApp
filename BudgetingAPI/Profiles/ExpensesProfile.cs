@@ -10,6 +10,8 @@ namespace BudgetingAPI.Profiles
         {
             CreateMap<Expense, ExpenseReadDTO>();
             CreateMap<ExpenseCreateDTO, Expense>();
+            CreateMap<ExpenseUpdateDTO, Expense>();
+            CreateMap<ExpensePatchDTO, Expense>();
         }
     }
 }

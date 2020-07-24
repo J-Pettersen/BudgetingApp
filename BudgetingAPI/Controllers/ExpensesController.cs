@@ -26,7 +26,7 @@ namespace BudgetingAPI.Controllers
 
         //GET api/expenses
         [HttpGet]
-        public async Task<ActionResult<List<ExpenseReadDTO>>> GetAllExpenses()
+        public async Task<ActionResult<IEnumerable<ExpenseReadDTO>>> GetAllExpenses()
         {
             var expensesList = await _repository.GetAllExpenses();
 
@@ -48,15 +48,55 @@ namespace BudgetingAPI.Controllers
 
         //POST api/expenses
         [HttpPost]
-        public async Task<ActionResult<ExpenseReadDTO>> CreateExpense(ExpenseCreateDTO input)
+        public async Task<ActionResult<ExpenseReadDTO>> CreateExpense(ExpenseCreateDTO expenseCreateDTO)
         {
-            var expenseModel = _mapper.Map<Expense>(input);
+            var expenseModel = _mapper.Map<Expense>(expenseCreateDTO);
             _repository.CreateExpense(expenseModel);
             await _repository.SaveChanges();
             
             var expenseReadDTO = _mapper.Map<ExpenseReadDTO>(expenseModel);
 
-            return CreatedAtRoute(nameof(GetExpenseById), new { id =expenseReadDTO.Id }, expenseReadDTO);
+            return CreatedAtRoute(nameof(GetExpenseById), new { id = expenseReadDTO.Id }, expenseReadDTO);
+        }
+
+        //PUT api/expenses/{id}
+        [HttpPut("{id}")]
+        public async Task<ActionResult> UpdateExpense(int id, ExpenseUpdateDTO expenseUpdateDTO)
+        {
+            var expenseRepo = await _repository.GetExpenseById(id);
+
+            if(expenseRepo == null)
+            {
+                return NotFound();
+            }
+
+            _mapper.Map(expenseUpdateDTO, expenseRepo);
+
+            _repository.UpdateExpense(expenseRepo);
+
+            await _repository.SaveChanges();
+            
+            return NoContent();
+        }
+
+        //Patch api/expenses/{id}
+        [HttpPatch("{id}")]
+        public async Task<ActionResult> PatchExpense(int id, ExpensePatchDTO expensePatchDTO)
+        {
+            var expenseRepo = await _repository.GetExpenseById(id);
+
+            if(expenseRepo == null)
+            {
+                return NotFound();
+            }
+
+            _mapper.Map(expensePatchDTO, expenseRepo);
+
+            _repository.PatchExpense(expenseRepo);
+
+            await _repository.SaveChanges();
+            
+            return NoContent();
         }
     }
 }

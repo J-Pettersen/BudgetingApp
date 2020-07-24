@@ -2,7 +2,6 @@ using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using BudgetingAPI.Models;
-using System.Linq;
 using System;
 
 
@@ -16,7 +15,7 @@ namespace BudgetingAPI.Data
             _dbContext = dbContext;
         }
 
-        public async Task<List<Expense>> GetAllExpenses()
+        public async Task<IEnumerable<Expense>> GetAllExpenses()
         {
             return await _dbContext.Expenses.ToListAsync();
         }
@@ -32,12 +31,25 @@ namespace BudgetingAPI.Data
             {
                 throw new ArgumentNullException(nameof(expense));
             }
-            _dbContext.Expenses.Add(expense);        
+            _dbContext.Expenses.Add(expense);  
         }
+
+        public void UpdateExpense(Expense expense)
+        {
+            //No implementation currently needed.
+        }
+
+        public void PatchExpense(Expense expense)
+        {
+            //No implementation currently needed.
+        }
+    
 
         public async Task<bool> SaveChanges()
         {
             return (await _dbContext.SaveChangesAsync() >=0 );
         }
-    }
+
+        
+    }        
 }
