@@ -1,3 +1,5 @@
+using System;
+using AutoMapper;
 using BudgetingAPI.Data;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -24,7 +26,9 @@ namespace BudgetingAPI
 
             services.AddControllers();
 
-            services.AddScoped<IBudgetingRepo, FakeBudgetingRepo>();
+            services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());      
+
+            services.AddScoped<IBudgetingRepo, BudgetingRepo>();
         }
         
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
