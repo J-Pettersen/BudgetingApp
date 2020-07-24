@@ -1,12 +1,15 @@
 using System;
 using AutoMapper;
 using BudgetingAPI.Data;
+using Microsoft.Extensions.Hosting;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Newtonsoft.Json.Serialization;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
+
+
 
 namespace BudgetingAPI
 {
@@ -24,7 +27,8 @@ namespace BudgetingAPI
             services.AddDbContext<BudgetingDbContext>(options => options.UseSqlServer
                         (Configuration.GetConnectionString("BudgetingConnection")));
 
-            services.AddControllers();
+            services.AddControllers().AddNewtonsoftJson(a => 
+                a.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver());
 
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());      
 

@@ -54,3 +54,7 @@ C:\DEV\budgetingapp\BudgetingAPI\bin\Debug\netcoreapp3.1\runtimes\win\lib\netsta
 C:\DEV\budgetingapp\BudgetingAPI\obj\Debug\netcoreapp3.1\BudgetingAPI.csproj.CopyComplete
 C:\DEV\budgetingapp\BudgetingAPI\bin\Debug\netcoreapp3.1\AutoMapper.dll
 C:\DEV\budgetingapp\BudgetingAPI\bin\Debug\netcoreapp3.1\AutoMapper.Extensions.Microsoft.DependencyInjection.dll
+C:\DEV\budgetingapp\BudgetingAPI\bin\Debug\netcoreapp3.1\Microsoft.AspNetCore.JsonPatch.dll
+C:\DEV\budgetingapp\BudgetingAPI\bin\Debug\netcoreapp3.1\Microsoft.AspNetCore.Mvc.NewtonsoftJson.dll
+C:\DEV\budgetingapp\BudgetingAPI\bin\Debug\netcoreapp3.1\Newtonsoft.Json.dll
+C:\DEV\budgetingapp\BudgetingAPI\bin\Debug\netcoreapp3.1\Newtonsoft.Json.Bson.dll

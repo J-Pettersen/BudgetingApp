@@ -1,6 +1,6 @@
+using BudgetingAPI.Models;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using BudgetingAPI.Models;
 
 namespace BudgetingAPI.Data
 {
@@ -11,7 +11,7 @@ namespace BudgetingAPI.Data
 
         void CreateExpense(Expense expense);
         void UpdateExpense(Expense expense);
-        void PatchExpense(Expense expense);
+        void DeleteExpense(Expense expense);
 
         Task<bool> SaveChanges();
     }

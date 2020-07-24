@@ -1,8 +1,8 @@
-using Microsoft.EntityFrameworkCore;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using BudgetingAPI.Models;
 using System;
+using BudgetingAPI.Models;
+using System.Threading.Tasks;
+using System.Collections.Generic;
+using Microsoft.EntityFrameworkCore;
 
 
 namespace BudgetingAPI.Data
@@ -39,9 +39,13 @@ namespace BudgetingAPI.Data
             //No implementation currently needed.
         }
 
-        public void PatchExpense(Expense expense)
+        public void DeleteExpense(Expense expense)
         {
-            //No implementation currently needed.
+             if(expense == null)
+            {
+                throw new ArgumentNullException(nameof(expense));
+            }
+            _dbContext.Expenses.Remove(expense);
         }
     
 

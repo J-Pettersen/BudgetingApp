@@ -1,16 +1,14 @@
-using System.Collections.Generic;
-using System.Threading.Tasks;
 using AutoMapper;
 using BudgetingAPI.Data;
 using BudgetingAPI.DTOs;
 using BudgetingAPI.Models;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using System.Collections.Generic;
+using Microsoft.AspNetCore.JsonPatch;
 
 namespace BudgetingAPI.Controllers
-{
-
-    
-
+{ 
     [Route("api/expenses")]
     [ApiController]
     public class ExpensesController : ControllerBase
@@ -24,6 +22,7 @@ namespace BudgetingAPI.Controllers
             _mapper = mapper;
         }
 
+
         //GET api/expenses
         [HttpGet]
         public async Task<ActionResult<IEnumerable<ExpenseReadDTO>>> GetAllExpenses()
@@ -32,6 +31,7 @@ namespace BudgetingAPI.Controllers
 
             return _mapper.Map<List<ExpenseReadDTO>>(expensesList);
         }
+
 
         //GET api/expenses/{id}
         [HttpGet("{id}", Name="GetExpenseById")]
@@ -46,6 +46,7 @@ namespace BudgetingAPI.Controllers
             return _mapper.Map<ExpenseReadDTO>(expense);
         }
 
+
         //POST api/expenses
         [HttpPost]
         public async Task<ActionResult<ExpenseReadDTO>> CreateExpense(ExpenseCreateDTO expenseCreateDTO)
@@ -59,44 +60,74 @@ namespace BudgetingAPI.Controllers
             return CreatedAtRoute(nameof(GetExpenseById), new { id = expenseReadDTO.Id }, expenseReadDTO);
         }
 
+
         //PUT api/expenses/{id}
         [HttpPut("{id}")]
         public async Task<ActionResult> UpdateExpense(int id, ExpenseUpdateDTO expenseUpdateDTO)
         {
-            var expenseRepo = await _repository.GetExpenseById(id);
+            var expenseRepoModel = await _repository.GetExpenseById(id);
 
-            if(expenseRepo == null)
+            if(expenseRepoModel == null)
             {
                 return NotFound();
             }
 
-            _mapper.Map(expenseUpdateDTO, expenseRepo);
+            _mapper.Map(expenseUpdateDTO, expenseRepoModel);
 
-            _repository.UpdateExpense(expenseRepo);
+            _repository.UpdateExpense(expenseRepoModel);
 
             await _repository.SaveChanges();
             
             return NoContent();
         }
 
-        //Patch api/expenses/{id}
-        [HttpPatch("{id}")]
-        public async Task<ActionResult> PatchExpense(int id, ExpensePatchDTO expensePatchDTO)
-        {
-            var expenseRepo = await _repository.GetExpenseById(id);
 
-            if(expenseRepo == null)
+        //PATCH api/expenses/{id}
+        [HttpPatch("{id}")]
+        public async Task<ActionResult> PatchExpense(int id, JsonPatchDocument<ExpenseUpdateDTO> patchDoc)
+        {
+            var expenseRepoModel = await _repository.GetExpenseById(id);
+
+            if(expenseRepoModel == null)
             {
                 return NotFound();
             }
 
-            _mapper.Map(expensePatchDTO, expenseRepo);
+            var expenseToPatch = _mapper.Map<ExpenseUpdateDTO>(expenseRepoModel);
+            patchDoc.ApplyTo(expenseToPatch, ModelState);
 
-            _repository.PatchExpense(expenseRepo);
+            if(!TryValidateModel(expenseToPatch))
+            {
+                return ValidationProblem(ModelState);
+            }
+
+            _mapper.Map(expenseToPatch, expenseRepoModel);
+
+            _repository.UpdateExpense(expenseRepoModel);
 
             await _repository.SaveChanges();
             
+            return NoContent();
+        }
+
+
+        //DELETE api/expenses/{id}
+        [HttpDelete("{id}")]
+        public async Task<ActionResult> DeleteExpense(int id)
+        {
+            var expenseRepoModel = await _repository.GetExpenseById(id);
+
+            if(expenseRepoModel == null)
+            {
+                return NotFound();
+            }
+
+            _repository.DeleteExpense(expenseRepoModel);
+
+            await _repository.SaveChanges();
+
             return NoContent();
         }
     }
+
 }
