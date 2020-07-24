@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using BudgetingAPI.Models;
 using System.Linq;
+using System;
 
 namespace BudgetingAPI.Data
 {
@@ -12,6 +13,15 @@ namespace BudgetingAPI.Data
             _dbContext = dbContext;
         }
 
+        public void CreateExpense(Expense expense)
+        {
+            if(expense == null)
+            {
+                throw new ArgumentNullException(nameof(expense));
+            }
+            _dbContext.Expenses.Add(expense);        
+        }
+
         public IEnumerable<Expense> GetAllExpenses()
         {
             return _dbContext.Expenses.ToList();
@@ -20,6 +30,11 @@ namespace BudgetingAPI.Data
         public Expense GetExpenseById(int id)
         {
             return _dbContext.Expenses.FirstOrDefault(e => e.Id == id);
+        }
+
+        public bool SaveChanges()
+        {
+            return (_dbContext.SaveChanges() >=0 );
         }
     }
 }

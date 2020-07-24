@@ -9,6 +9,7 @@ namespace BudgetingAPI.Profiles
         public ExpensesProfile()
         {
             CreateMap<Expense, ExpenseReadDTO>();
+            CreateMap<ExpenseCreateDTO, Expense>();
         }
     }
 }

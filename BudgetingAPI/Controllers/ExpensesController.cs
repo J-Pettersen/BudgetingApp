@@ -23,7 +23,7 @@ namespace BudgetingAPI.Controllers
             _mapper = mapper;
         }
 
-        //Get api/expenses
+        //GET api/expenses
         [HttpGet]
         public ActionResult <IEnumerable<ExpenseReadDTO>> GetAllExpenses()
         {
@@ -32,8 +32,8 @@ namespace BudgetingAPI.Controllers
             return Ok(_mapper.Map<IEnumerable<ExpenseReadDTO>>(expensesList));
         }
 
-        //Get api/expenses/{id}
-        [HttpGet("{id}")]
+        //GET api/expenses/{id}
+        [HttpGet("{id}", Name="GetExpenseById")]
         public ActionResult <ExpenseReadDTO> GetExpenseById(int id)
         {
             var expense = _repository.GetExpenseById(id);
@@ -43,6 +43,19 @@ namespace BudgetingAPI.Controllers
                 return NotFound();
             }
             return Ok(_mapper.Map<ExpenseReadDTO>(expense));
+        }
+
+        //POST api/expenses
+        [HttpPost]
+        public ActionResult<ExpenseReadDTO> CreateExpense(ExpenseCreateDTO input)
+        {
+            var expenseModel = _mapper.Map<Expense>(input);
+            _repository.CreateExpense(expenseModel);
+            _repository.SaveChanges();
+            
+            var expenseReadDTO = _mapper.Map<ExpenseReadDTO>(expenseModel);
+
+            return CreatedAtRoute(nameof(GetExpenseById), new { id =expenseReadDTO.Id }, expenseReadDTO);
         }
     }
 }
