@@ -1,15 +1,16 @@
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using BudgetingAPI.Models;
 
 namespace BudgetingAPI.Data
 {
     public interface IBudgetingRepo
     {       
-        IEnumerable<Expense> GetAllExpenses();
-        Expense GetExpenseById(int id);        
+        Task<List<Expense>> GetAllExpenses();
+        Task<Expense> GetExpenseById(int id);        
 
         void CreateExpense(Expense expense);
 
-        bool SaveChanges();
+        Task<bool> SaveChanges();
     }
 }

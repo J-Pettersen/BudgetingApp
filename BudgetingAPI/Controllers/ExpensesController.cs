@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using AutoMapper;
 using BudgetingAPI.Data;
 using BudgetingAPI.DTOs;
@@ -25,33 +26,33 @@ namespace BudgetingAPI.Controllers
 
         //GET api/expenses
         [HttpGet]
-        public ActionResult <IEnumerable<ExpenseReadDTO>> GetAllExpenses()
+        public async Task<ActionResult<List<ExpenseReadDTO>>> GetAllExpenses()
         {
-            var expensesList = _repository.GetAllExpenses();
+            var expensesList = await _repository.GetAllExpenses();
 
-            return Ok(_mapper.Map<IEnumerable<ExpenseReadDTO>>(expensesList));
+            return _mapper.Map<List<ExpenseReadDTO>>(expensesList);
         }
 
         //GET api/expenses/{id}
         [HttpGet("{id}", Name="GetExpenseById")]
-        public ActionResult <ExpenseReadDTO> GetExpenseById(int id)
+        public async Task<ActionResult<ExpenseReadDTO>> GetExpenseById(int id)
         {
-            var expense = _repository.GetExpenseById(id);
+            var expense = await _repository.GetExpenseById(id);
 
             if (expense == null)
             {
                 return NotFound();
             }
-            return Ok(_mapper.Map<ExpenseReadDTO>(expense));
+            return _mapper.Map<ExpenseReadDTO>(expense);
         }
 
         //POST api/expenses
         [HttpPost]
-        public ActionResult<ExpenseReadDTO> CreateExpense(ExpenseCreateDTO input)
+        public async Task<ActionResult<ExpenseReadDTO>> CreateExpense(ExpenseCreateDTO input)
         {
             var expenseModel = _mapper.Map<Expense>(input);
             _repository.CreateExpense(expenseModel);
-            _repository.SaveChanges();
+            await _repository.SaveChanges();
             
             var expenseReadDTO = _mapper.Map<ExpenseReadDTO>(expenseModel);
 
